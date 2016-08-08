@@ -73,3 +73,35 @@ public class MySerialReader : IDisposable
             serialPort.Dispose();
         }
   }
+  
+  #SerialPort using Timer
+  
+  public class SerialPortExample
+{
+    private readonly SerialPort _serialPort;
+    private readonly Timer _timerPortScan;
+ 
+    public void InitializeSerialPort()
+    {
+        _serialPort = new SerialPort("COM1", 9600, Parity.None, 8, StopBits.One);
+        _serialPort.Open();
+ 
+        _timerPortScan = new Timer();
+        _timerPortScan.Interval = 100;
+        _timerPortScan.Tick += timerPortScan_Tick;
+        _timerPortScan.Start();
+    }
+ 
+    void timerPortScan_Tick(object sender, EventArgs e)
+    {
+        if (_serialPort.BytesToRead != 0)
+            SerialPort_DataReceived();
+    }
+ 
+    private void SerialPort_DataReceived()
+    {
+        // read buffer
+        // implement what to do with data
+    }
+}
+
